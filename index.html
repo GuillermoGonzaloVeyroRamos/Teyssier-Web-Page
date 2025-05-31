@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Normita</title>
+</head>
+<body> 
+    <!-- Preloader -->
+    <div class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Partículas de fondo -->
+    <div class="particles" id="particles"></div>
+
+    <header class="header">
+        <img src="/Logo.png" alt="Logo de la empresa"> <button class="hamburger-icon" id="hamburgerIcon" aria-label="Abrir menú" aria-expanded="false">
+            <i class="fas fa-bars"></i> </button>
+
+        <div class="header_botones" id="headerBotones">
+            <a href="">Servicios</a>
+            <a href="">Contacto</a>
+            <a href="">Portafolio</a>
+            <a href="">Redes</a>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="banner_principal">
+            <img src="/Banner1.gif" alt="">
+        </div>
+        <div class="second_banner">
+            <img src="/Banner2.gif" alt="">
+        </div>
+        <div class="block_three">
+            <div class="block_1">
+                <img src="/corazon.gif" alt="">
+                <p>Imagina.</p>
+            </div>
+            <div class="block_2">
+                <img src="/corazon.gif" alt="">
+                <p>Conecta.</p>
+            </div>
+            <div class="block_3">
+                <img src="/corazon.gif" alt="">
+                <p>Crea.</p>
+            </div>
+        </div>
+        <div class="servicios">
+            <div class="servicios_texto">
+                <h2>Servicios:</h2>
+                <ul>
+                    <li>Branding</li>
+                    <li>Ilustración</li>
+                    <li>Identidad visual</li>
+                    <li>Diseño de etiqueta</li>
+                    <li>Ilustración editorial</li>
+                    <li>Edición y animación de vídeo</li>
+                    <li>Dirección creativa y storytelling</li>
+                </ul>
+                <a href="">Portafolio</a>
+            </div>
+            <div class="servicio_img">
+                <img src="/Bloque1.gif" alt="">
+            </div>
+        </div>
+        <div class="contacto">
+            <h2>Contacto:</h2>
+            <form action="">
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre:" required>
+
+                <input type="email" id="correo" name="correo" placeholder="Correo:" required>
+
+                <input type="tel" id="telefono" name="telefono" placeholder="teléfono:" required>
+
+                <textarea id="mensaje" name="mensaje" placeholder="Mensaje:" required></textarea>
+
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-img">
+            <img src="/corazon.gif" alt="">
+        </div>
+        <div class="footer-texto">
+            <h2>Redes</h2>
+            <div class="redes">
+                <a href="https://www.instagram.com/teyssierstudio" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <p>teyssierstudio</p>
+            </div>
+            <div class="redes">
+                <a href="https://www.behance.net/FavelaTeyssier" target="_blank"><i class="fa-brands fa-behance"></i></a>
+                <p>https://www.behance.net/FavelaTeyssier</p>
+            </div>
+            <div class="redes">
+                <a href="https://wa.me/+526182294005" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                <p>(618) 229 4005</p>
+            </div>
+            <div class="redes">
+                <a href="favelateyssier@hotmail.com"><i class="fa-solid fa-envelope"></i></a>
+                <ul>
+                    <li>favelateyssier@hotmail.com</li>
+                    <li>normafavelaperez@hotmail.com</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+
+<script>
+        // Preloader
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            
+            setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+                setTimeout(() => {
+                    loadingOverlay.remove();
+                    initAnimations();
+                }, 500);
+            }, 2000);
+        });
+
+        // Inicializar todas las animaciones
+        function initAnimations() {
+            // Crear partículas flotantes
+            createParticles();
+            
+            // Header scroll effect
+            initScrollHeader();
+            
+            // Animaciones de scroll
+            initScrollAnimations();
+            
+            // Efecto parallax
+            initParallax();
+            
+            // Animaciones de entrada
+            initFadeInAnimations();
+        }
+
+        // Menú hamburguesa mejorado
+        const hamburgerIcon = document.getElementById('hamburgerIcon');
+        const headerBotones = document.getElementById('headerBotones');
+
+        hamburgerIcon.addEventListener('click', function() {
+            headerBotones.classList.toggle('active');
+            hamburgerIcon.classList.toggle('active');
+            
+            const isExpanded = headerBotones.classList.contains('active');
+            hamburgerIcon.setAttribute('aria-expanded', isExpanded);
+            
+            const icon = hamburgerIcon.querySelector('i');
+            if (isExpanded) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Cerrar menú al hacer clic en enlaces
+        headerBotones.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                headerBotones.classList.remove('active');
+                hamburgerIcon.classList.remove('active');
+                hamburgerIcon.setAttribute('aria-expanded', 'false');
+                
+                const icon = hamburgerIcon.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Crear sistema de partículas
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Header con efecto de scroll
+        function initScrollHeader() {
+            const header = document.querySelector('.header');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // Animaciones de scroll con Intersection Observer
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        
+                        // Animación especial para lista de servicios
+                        if (entry.target.classList.contains('servicios')) {
+                            animateServicesList();
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.scroll-animate').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Efecto parallax mejorado
+        function initParallax() {
+            let ticking = false;
+            
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        const scrolled = window.pageYOffset;
+                        const banners = document.querySelectorAll('.banner_principal img, .second_banner img');
+                        
+                        banners.forEach((banner, index) => {
+                            const speed = 0.3 + (index * 0.1);
+                            banner.style.transform = `translateY(${scrolled * speed}px) scale(1.1)`;
+                        });
+                        
+                        ticking = false;
+                    });
+                    
+                    ticking = true;
+                }
+            });
+        }
+
+        // Animaciones de entrada escalonadas
+        function initFadeInAnimations() {
+            const fadeElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
+            
+            fadeElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.animationDelay = (index * 0.2) + 's';
+                }, 100);
+            });
+        }
+
+        // Animación especial para lista de servicios
+        function animateServicesList() {
+            const serviceItems = document.querySelectorAll('.servicios_texto li');
+            
+            serviceItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, 150 * index);
+            });
+        }
+
+        // Efecto de ondas en botones
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                const button = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
+                createRipple(e, button);
+            }
+        });
+
+        function createRipple(event, button) {
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: rgba(255,255,255,0.4);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s ease-out;
+                pointer-events: none;
+                z-index: 1;
+            `;
+            
+            // Añadir estilos de ripple si no existen
+            if (!document.getElementById('ripple-styles')) {
+                const style = document.createElement('style');
+                style.id = 'ripple-styles';
+                style.textContent = `
+                    @keyframes ripple {
+                        to {
+                            transform: scale(2);
+                            opacity: 0;
+                        }
+                    }
+                    button, .servicios_texto a {
+                        position: relative;
+                        overflow: hidden;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            button.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // Smooth scroll para navegación
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = target.offsetTop - headerHeight - 20;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Animación de escritura para títulos
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Activar animación de escritura cuando sea visible
+        const serviciosTitle = document.querySelector('.servicios_texto h2');
+        if (serviciosTitle) {
+            const originalText = serviciosTitle.textContent;
+            
+            const titleObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        typeWriter(entry.target, originalText, 120);
+                        titleObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            titleObserver.observe(serviciosTitle);
+        }
+
+        // Cerrar menú móvil al redimensionar
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                headerBotones.classList.remove('active');
+                hamburgerIcon.classList.remove('active');
+                hamburgerIcon.setAttribute('aria-expanded', 'false');
+                
+                const icon = hamburgerIcon.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Animación de latido para corazones
+        document.querySelectorAll('.footer-img img, .block_1 img, .block_2 img, .block_3 img').forEach(img => {
+            img.addEventListener('mouseenter', function() {
+                this.style.animation = 'heartbeat 1.5s ease-in-out infinite';
+            });
+            
+            img.addEventListener('mouseleave', function() {
+                this.style.animation = '';
+            });
+        });
+
+        // Prevenir envío del formulario y mostrar animación
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const button = this.querySelector('button');
+            const originalText = button.textContent;
+            
+            button.textContent = 'Enviando...';
+            button.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+            
+            setTimeout(() => {
+                button.textContent = '¡Enviado!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                    this.reset();
+                }, 2000);
+            }, 1500);
+        });
+</script>
+</html>
