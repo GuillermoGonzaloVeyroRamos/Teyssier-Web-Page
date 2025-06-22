@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="style.css">
     <title>Normita</title>
 </head>
-<body> 
+<body>  
     <!-- Preloader -->
     <div class="loading-overlay">
         <div class="spinner"></div>
@@ -86,6 +86,74 @@
         </div>
     </div>
 
+        <!-- Modal del Aviso de Privacidad -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Aviso de Privacidad</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="section">
+                    <p><strong>Favela Teyssier Diseño Creativo</strong>, con domicilio en León, Guanajuato, México, y correo electrónico <strong>favelateydesign@hotmail.com</strong>, es responsable del uso y protección de tus datos personales.</p>
+                </div>
+
+                <div class="section">
+                    <h3>¿Qué datos personales recopilamos?</h3>
+                    <p>Los datos que podríamos solicitar incluyen:</p>
+                    <ul>
+                        <li>Nombre completo</li>
+                        <li>Dirección de correo electrónico</li>
+                        <li>Número telefónico</li>
+                        <li>Información relacionada con tu proyecto o consulta</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h3>¿Para qué utilizamos tus datos?</h3>
+                    <p>Los datos personales que recabamos se utilizarán para:</p>
+                    <ul>
+                        <li>Atender solicitudes de contacto</li>
+                        <li>Ofrecer cotizaciones y servicios de diseño</li>
+                        <li>Dar seguimiento a propuestas, proyectos o servicios contratados</li>
+                        <li>Mantener comunicación contigo sobre temas relacionados</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h3>¿Con quién compartimos tus datos?</h3>
+                    <p>No compartimos tus datos personales con terceros, salvo que sea necesario por requerimiento legal o con tu autorización expresa.</p>
+                </div>
+
+                <div class="section">
+                    <h3>¿Cómo puedes ejercer tus derechos ARCO?</h3>
+                    <p>Tienes derecho a acceder, rectificar, cancelar u oponerte al uso de tus datos (derechos ARCO). Puedes hacerlo enviando un correo a <strong>normafavelaperez@hotmail.com</strong> con tu solicitud y datos de contacto.</p>
+                </div>
+
+                <div class="section">
+                    <h3>Cambios al aviso de privacidad</h3>
+                    <p>Este aviso puede ser modificado en cualquier momento para cumplir con actualizaciones legales o por mejoras en nuestros procesos. Las versiones actualizadas estarán disponibles en esta página.</p>
+                </div>
+
+                <div class="section">
+                    <h3>Consentimiento</h3>
+                    <p>Consentimiento</p>
+                </div>
+
+                <div class="section">
+                    <p><strong>Fecha de actualización:</strong> Junio 2025</p>
+                    <p><em>Nos reservamos el derecho de efectuar modificaciones o actualizaciones al presente Aviso de Privacidad, mismas que serán notificadas a través de nuestro sitio web.</em></p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-accept" id="acceptBtn">Acepto</button>
+                <button class="btn btn-decline" id="declineBtn">No Acepto</button>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="footer-img">
             <img src="/corazon.gif" alt="">
@@ -112,6 +180,7 @@
                 </ul>
             </div>
         </div>
+        <button class="open-modal-btn" id="openModal">Aviso de Privacidad</button>
     </footer>
 </body>
 
@@ -427,5 +496,87 @@
                 }, 2000);
             }, 1500);
         });
+
+         // Referencias a elementos del DOM
+        const openModalBtn = document.getElementById('openModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModalBtn = document.getElementById('closeModal');
+        const acceptBtn = document.getElementById('acceptBtn');
+        const declineBtn = document.getElementById('declineBtn');
+        const modal = document.querySelector('.modal');
+
+        // Función para abrir el modal
+        function openModal() {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+            
+            // Agregar animación de entrada
+            setTimeout(() => {
+                modal.classList.add('fade-in');
+            }, 100);
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            modal.classList.remove('fade-in');
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restaurar scroll del body
+        }
+
+        // Función para manejar la aceptación
+        function handleAccept() {
+            // Aquí puedes agregar lógica para guardar la preferencia del usuario
+            console.log('Usuario aceptó el aviso de privacidad');
+            
+            // Ejemplo: guardar en variables (ya que no podemos usar localStorage)
+            window.privacyAccepted = true;
+            window.privacyAcceptedDate = new Date().toISOString();
+            
+            // Mostrar mensaje de confirmación
+            alert('¡Gracias por aceptar nuestro aviso de privacidad!');
+            closeModal();
+        }
+
+        // Función para manejar el rechazo
+        function handleDecline() {
+            console.log('Usuario rechazó el aviso de privacidad');
+            
+            // Ejemplo: guardar en variables
+            window.privacyAccepted = false;
+            
+            // Mostrar mensaje informativo
+            if (confirm('Al no aceptar el aviso de privacidad, algunas funcionalidades pueden estar limitadas. ¿Desea continuar?')) {
+                closeModal();
+            }
+        }
+
+        // Event listeners
+        openModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        acceptBtn.addEventListener('click', handleAccept);
+        declineBtn.addEventListener('click', handleDecline);
+
+        // Cerrar modal al hacer clic fuera de él
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+
+        // Cerrar modal con la tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Función para verificar si el usuario ya aceptó (ejemplo de uso)
+        function checkPrivacyStatus() {
+            if (window.privacyAccepted) {
+                console.log('El usuario ya aceptó el aviso de privacidad el:', window.privacyAcceptedDate);
+                return true;
+            }
+            return false;
+        }
 </script>
 </html>

@@ -564,6 +564,8 @@ footer {
     position: relative;
     overflow: hidden;
     padding: 60px 0;
+    flex-direction: column;
+    align-items: center;
 }
 
 footer::before {
@@ -693,6 +695,246 @@ footer::before {
     border-radius: 50%;
     animation: float-particle 6s linear infinite;
 }
+
+.container {
+    text-align: center;
+    color: white;
+}
+
+.open-modal-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.open-modal-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+    background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+}
+
+/* Estilos del Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: white;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    transform: scale(0.8) translateY(50px);
+    transition: all 0.3s ease;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.modal-overlay.active .modal {
+    transform: scale(1) translateY(0);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px 30px;
+    position: relative;
+}
+
+.modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 30px;
+    max-height: 60vh;
+    overflow-y: auto;
+    color: #333;
+    line-height: 1.6;
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}
+
+.section {
+    margin-bottom: 25px;
+}
+
+.section h3 {
+    color: #667eea;
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.section p {
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.section ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.section li {
+    margin-bottom: 8px;
+}
+
+.contact-info {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+.contact-info h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.contact-info p {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.modal-footer {
+    padding: 20px 30px;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-accept {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+}
+
+.btn-accept:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(76, 175, 80, 0.3);
+}
+
+.btn-decline {
+    background: linear-gradient(45deg, #f44336, #d32f2f);
+    color: white;
+}
+
+.btn-decline:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(244, 67, 54, 0.3);
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .modal {
+        max-width: 95%;
+        margin: 10px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+        max-height: 50vh;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
 
 @keyframes float-particle {
     0% {
@@ -831,4 +1073,5 @@ footer::before {
         display: block;
         text-align: center;
     }
+}
 }
