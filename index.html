@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>Normita</title>
@@ -24,10 +26,9 @@
             <i class="fas fa-bars"></i> </button>
 
         <div class="header_botones" id="headerBotones">
-            <a href="">Servicios</a>
-            <a href="">Contacto</a>
-            <a href="">Portafolio</a>
-            <a href="">Redes</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#contacto">Contacto</a>
+            <a href="#redes">Redes</a>
         </div>
     </header>
 
@@ -52,7 +53,7 @@
                 <p>Crea.</p>
             </div>
         </div>
-        <div class="servicios">
+        <div class="servicios" id="servicios">
             <div class="servicios_texto">
                 <h2>Servicios:</h2>
                 <ul>
@@ -64,15 +65,26 @@
                     <li>Edición y animación de vídeo</li>
                     <li>Dirección creativa y storytelling</li>
                 </ul>
-                <a href="">Portafolio</a>
+                <a href="https://www.behance.net/FavelaTeyssier">Portafolio</a>
             </div>
             <div class="servicio_img">
                 <img src="/Bloque1.gif" alt="">
             </div>
         </div>
-        <div class="contacto">
+        <div class="contacto" id="contacto">
             <h2>Contacto:</h2>
-            <form action="">
+            <!-- <form action="">
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre:" required>
+
+                <input type="email" id="correo" name="correo" placeholder="Correo:" required>
+
+                <input type="tel" id="telefono" name="telefono" placeholder="teléfono:" required>
+
+                <textarea id="mensaje" name="mensaje" placeholder="Mensaje:" required></textarea>
+
+                <button type="submit">Enviar</button>
+            </form> -->
+            <form action="https://formspree.io/f/mrbkyeja" method="POST">
                 <input type="text" id="nombre" name="nombre" placeholder="Nombre:" required>
 
                 <input type="email" id="correo" name="correo" placeholder="Correo:" required>
@@ -146,15 +158,10 @@
                     <p><em>Nos reservamos el derecho de efectuar modificaciones o actualizaciones al presente Aviso de Privacidad, mismas que serán notificadas a través de nuestro sitio web.</em></p>
                 </div>
             </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-accept" id="acceptBtn">Acepto</button>
-                <button class="btn btn-decline" id="declineBtn">No Acepto</button>
-            </div>
         </div>
     </div>
 
-    <footer>
+    <footer id="redes">
         <div class="footer-img">
             <img src="/corazon.gif" alt="">
         </div>
@@ -173,9 +180,8 @@
                 <p>(618) 229 4005</p>
             </div>
             <div class="redes">
-                <a href="favelateyssier@hotmail.com"><i class="fa-solid fa-envelope"></i></a>
+                <a href="normafavelaperez@hotmail.com"><i class="fa-solid fa-envelope"></i></a>
                 <ul>
-                    <li>favelateyssier@hotmail.com</li>
                     <li>normafavelaperez@hotmail.com</li>
                 </ul>
             </div>
@@ -275,31 +281,6 @@
                 } else {
                     header.classList.remove('scrolled');
                 }
-            });
-        }
-
-        // Animaciones de scroll con Intersection Observer
-        function initScrollAnimations() {
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        
-                        // Animación especial para lista de servicios
-                        if (entry.target.classList.contains('servicios')) {
-                            animateServicesList();
-                        }
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.scroll-animate').forEach(el => {
-                observer.observe(el);
             });
         }
 
@@ -523,33 +504,6 @@
             document.body.style.overflow = 'auto'; // Restaurar scroll del body
         }
 
-        // Función para manejar la aceptación
-        function handleAccept() {
-            // Aquí puedes agregar lógica para guardar la preferencia del usuario
-            console.log('Usuario aceptó el aviso de privacidad');
-            
-            // Ejemplo: guardar en variables (ya que no podemos usar localStorage)
-            window.privacyAccepted = true;
-            window.privacyAcceptedDate = new Date().toISOString();
-            
-            // Mostrar mensaje de confirmación
-            alert('¡Gracias por aceptar nuestro aviso de privacidad!');
-            closeModal();
-        }
-
-        // Función para manejar el rechazo
-        function handleDecline() {
-            console.log('Usuario rechazó el aviso de privacidad');
-            
-            // Ejemplo: guardar en variables
-            window.privacyAccepted = false;
-            
-            // Mostrar mensaje informativo
-            if (confirm('Al no aceptar el aviso de privacidad, algunas funcionalidades pueden estar limitadas. ¿Desea continuar?')) {
-                closeModal();
-            }
-        }
-
         // Event listeners
         openModalBtn.addEventListener('click', openModal);
         closeModalBtn.addEventListener('click', closeModal);
@@ -569,14 +523,5 @@
                 closeModal();
             }
         });
-
-        // Función para verificar si el usuario ya aceptó (ejemplo de uso)
-        function checkPrivacyStatus() {
-            if (window.privacyAccepted) {
-                console.log('El usuario ya aceptó el aviso de privacidad el:', window.privacyAcceptedDate);
-                return true;
-            }
-            return false;
-        }
 </script>
 </html>
