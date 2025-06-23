@@ -764,7 +764,7 @@ footer::before {
 }
 
 .modal-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--obscuroMedio);
     color: white;
     padding: 25px 30px;
     position: relative;
@@ -818,12 +818,12 @@ footer::before {
 }
 
 .modal-body::-webkit-scrollbar-thumb {
-    background: #667eea;
+    background: var(--obscuroMedio);
     border-radius: 10px;
 }
 
 .modal-body::-webkit-scrollbar-thumb:hover {
-    background: #764ba2;
+    background: var(--obscuro);
 }
 
 .section {
@@ -831,7 +831,7 @@ footer::before {
 }
 
 .section h3 {
-    color: #667eea;
+    color: var(--obscuroMedio);
     font-size: 18px;
     margin-bottom: 10px;
     font-weight: 600;
@@ -910,6 +910,33 @@ footer::before {
 
 .fade-in {
     animation: fadeIn 0.5s ease-in;
+}
+
+.float_buttons {
+    display: flex;
+    position: fixed;
+    gap: 10px;
+    height: 80px;
+    bottom: 0px;
+    right: 20px;
+    z-index: 100;
+    text-align: center;
+    font-size: 12px;
+    flex-direction: column;
+}
+
+.float_buttons .arrow {
+    transition: transform 0.3s ease;
+}
+
+.float_buttons .arrow img
+ {
+    animation: bounce 2s infinite;
+}
+
+.float_buttons img {
+    width: 100%;
+    max-width: 50px;
 }
 
 @keyframes fadeIn {
