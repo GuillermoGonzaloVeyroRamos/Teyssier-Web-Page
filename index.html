@@ -459,24 +459,27 @@ document.addEventListener('DOMContentLoaded', function() {
         type();
     }
 
-    // Activar animación de escritura cuando sea visible
-    function initTypewriterEffect() {
-        const serviciosTitle = document.querySelector('.servicios_texto h2');
-        if (serviciosTitle) {
-            const originalText = serviciosTitle.textContent;
-            
-            const titleObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        typeWriter(entry.target, originalText, 120);
-                        titleObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.5 });
-            
-            titleObserver.observe(serviciosTitle);
-        }
-    }
+    // Activar animación de escritura cuando sea visible para todos los títulos
+    function initTypewriterEffect() {
+        const titlesToAnimate = document.querySelectorAll('.servicios_texto h2, .contacto h2, .footer-texto h2');
+        
+        titlesToAnimate.forEach(title => {
+            const originalText = title.textContent;
+            let hasAnimated = false; // Variable para asegurar que solo se anime una vez
+
+            const titleObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !hasAnimated) {
+                        typeWriter(entry.target, originalText, 120);
+                        hasAnimated = true; 
+                        titleObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.8 }); 
+            
+            titleObserver.observe(title);
+        });
+    }
 
     // Cerrar menú móvil al redimensionar
     window.addEventListener('resize', function() {
