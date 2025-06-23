@@ -191,24 +191,33 @@
 </body>
 
 <script>
-        // Preloader
-        document.addEventListener('DOMContentLoaded', function() {
-            const loadingOverlay = document.querySelector('.loading-overlay');
-            
-            setTimeout(() => {
-                loadingOverlay.classList.add('hidden');
-                setTimeout(() => {
-                    loadingOverlay.remove();
-                    initAnimations();
-                }, 500);
-            }, 2000);
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    // Preloader
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    
+    setTimeout(() => {
+        loadingOverlay.classList.add('hidden');
+        setTimeout(() => {
+            loadingOverlay.remove();
+            initAnimations(); // Inicializa las animaciones después de que el preloader desaparece
+        }, 500);
+    }, 2000);
 
-        const form = document.querySelector('.formulario');
-        
+    // Manejo del formulario de contacto
+    const form = document.querySelector('.formulario');
+    if (form) { // Asegúrate de que el formulario existe antes de intentar añadir el listener
         form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
+            e.preventDefault(); // Evita el envío tradicional del formulario
+
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.textContent;
+
+            // Cambia el estado del botón durante el envío
+            button.textContent = 'Enviando...';
+            button.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+            button.disabled = true; // Deshabilita el botón para evitar envíos múltiples
+
+            // Envía los datos a Formspree
             fetch(form.action, {
                 method: 'POST',
                 body: new FormData(form),
@@ -219,38 +228,50 @@
             .then(response => {
                 if (response.ok) {
                     alert('¡Mensaje enviado con éxito!');
-                    form.reset();
+                    button.textContent = '¡Enviado!';
+                    button.style.background = '#4CAF50'; // Color de éxito
+                    form.reset(); // Limpia el formulario
                 } else {
-                    alert('Hubo un error al enviar el mensaje. Por favor, intenta de nuevo.');
+                    // Intenta obtener un mensaje de error de Formspree si está disponible
+                    return response.json().then(data => {
+                        alert('Hubo un error al enviar el mensaje. ' + (data.error || 'Por favor, intenta de nuevo.'));
+                    }).catch(() => {
+                        alert('Hubo un error al enviar el mensaje. Por favor, intenta de nuevo.');
+                    });
                 }
             })
             .catch(error => {
-                alert('Hubo un error al enviar el mensaje. Por favor, intenta de nuevo.');
+                console.error('Error al enviar el formulario:', error);
+                alert('Hubo un error de conexión al enviar el mensaje. Por favor, revisa tu conexión y/o inténtalo de nuevo.');
+            })
+            .finally(() => {
+                // Restaura el botón después de un breve retraso, sin importar el resultado
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = ''; // Restaura el fondo original
+                    button.disabled = false; // Vuelve a habilitar el botón
+                }, 2000);
             });
         });
+    }
 
-        // Inicializar todas las animaciones
-        function initAnimations() {
-            // Crear partículas flotantes
-            createParticles();
-            
-            // Header scroll effect
-            initScrollHeader();
-            
-            // Animaciones de scroll
-            initScrollAnimations();
-            
-            // Efecto parallax
-            initParallax();
-            
-            // Animaciones de entrada
-            initFadeInAnimations();
-        }
+    // Funciones de inicialización de animaciones y efectos
+    function initAnimations() {
+        createParticles();
+        initScrollHeader();
+        initParallax();
+        initFadeInAnimations();
+        animateServicesList();
+        initTypewriterEffect();
+        initHeartbeatAnimation();
+        // Las funciones de ripple y smooth scroll ya se inicializan con event listeners
+    }
 
-        // Menú hamburguesa mejorado
-        const hamburgerIcon = document.getElementById('hamburgerIcon');
-        const headerBotones = document.getElementById('headerBotones');
+    // Menú hamburguesa mejorado
+    const hamburgerIcon = document.getElementById('hamburgerIcon');
+    const headerBotones = document.getElementById('headerBotones');
 
+    if (hamburgerIcon && headerBotones) {
         hamburgerIcon.addEventListener('click', function() {
             headerBotones.classList.toggle('active');
             hamburgerIcon.classList.toggle('active');
@@ -280,12 +301,13 @@
                 icon.classList.add('fa-bars');
             }
         });
+    }
 
-        // Crear sistema de partículas
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
+    // Crear sistema de partículas
+    function createParticles() {
+        const particlesContainer = document.getElementById('particles');
+        if (particlesContainer) {
             const particleCount = 15;
-            
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
@@ -295,11 +317,12 @@
                 particlesContainer.appendChild(particle);
             }
         }
+    }
 
-        // Header con efecto de scroll
-        function initScrollHeader() {
-            const header = document.querySelector('.header');
-            
+    // Header con efecto de scroll
+    function initScrollHeader() {
+        const header = document.querySelector('.header');
+        if (header) {
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
                     header.classList.add('scrolled');
@@ -308,141 +331,143 @@
                 }
             });
         }
+    }
 
-        // Efecto parallax mejorado
-        function initParallax() {
-            let ticking = false;
-            
-            window.addEventListener('scroll', () => {
-                if (!ticking) {
-                    requestAnimationFrame(() => {
-                        const scrolled = window.pageYOffset;
-                        const banners = document.querySelectorAll('.banner_principal img, .second_banner img');
-                        
-                        banners.forEach((banner, index) => {
-                            const speed = 0.3 + (index * 0.1);
-                            banner.style.transform = `translateY(${scrolled * speed}px) scale(1.1)`;
-                        });
-                        
-                        ticking = false;
+    // Efecto parallax mejorado
+    function initParallax() {
+        let ticking = false;
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const banners = document.querySelectorAll('.banner_principal img, .second_banner img');
+                    
+                    banners.forEach((banner, index) => {
+                        const speed = 0.3 + (index * 0.1);
+                        banner.style.transform = `translateY(${scrolled * speed}px) scale(1.1)`;
                     });
                     
-                    ticking = true;
-                }
-            });
-        }
-
-        // Animaciones de entrada escalonadas
-        function initFadeInAnimations() {
-            const fadeElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
-            
-            fadeElements.forEach((el, index) => {
-                setTimeout(() => {
-                    el.style.animationDelay = (index * 0.2) + 's';
-                }, 100);
-            });
-        }
-
-        // Animación especial para lista de servicios
-        function animateServicesList() {
-            const serviceItems = document.querySelectorAll('.servicios_texto li');
-            
-            serviceItems.forEach((item, index) => {
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateX(0)';
-                }, 150 * index);
-            });
-        }
-
-        // Efecto de ondas en botones
-        document.addEventListener('click', function(e) {
-            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-                const button = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
-                createRipple(e, button);
+                    ticking = false;
+                });
+                ticking = true;
             }
         });
+    }
 
-        function createRipple(event, button) {
-            const ripple = document.createElement('span');
-            const rect = button.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = event.clientX - rect.left - size / 2;
-            const y = event.clientY - rect.top - size / 2;
-            
-            ripple.style.cssText = `
-                position: absolute;
-                width: ${size}px;
-                height: ${size}px;
-                left: ${x}px;
-                top: ${y}px;
-                background: rgba(255,255,255,0.4);
-                border-radius: 50%;
-                transform: scale(0);
-                animation: ripple 0.6s ease-out;
-                pointer-events: none;
-                z-index: 1;
-            `;
-            
-            // Añadir estilos de ripple si no existen
-            if (!document.getElementById('ripple-styles')) {
-                const style = document.createElement('style');
-                style.id = 'ripple-styles';
-                style.textContent = `
-                    @keyframes ripple {
-                        to {
-                            transform: scale(2);
-                            opacity: 0;
-                        }
-                    }
-                    button, .servicios_texto a {
-                        position: relative;
-                        overflow: hidden;
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-            
-            button.appendChild(ripple);
-            
+    // Animaciones de entrada escalonadas
+    function initFadeInAnimations() {
+        const fadeElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
+        
+        fadeElements.forEach((el, index) => {
             setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        }
-
-        // Smooth scroll para navegación
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const headerHeight = document.querySelector('.header').offsetHeight;
-                    const targetPosition = target.offsetTop - headerHeight - 20;
-                    
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
+                el.style.animationDelay = (index * 0.2) + 's';
+            }, 100);
         });
+    }
 
-        // Animación de escritura para títulos
-        function typeWriter(element, text, speed = 100) {
-            let i = 0;
-            element.innerHTML = '';
-            
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                }
-            }
-            type();
+    // Animación especial para lista de servicios
+    function animateServicesList() {
+        const serviceItems = document.querySelectorAll('.servicios_texto li');
+        
+        serviceItems.forEach((item, index) => {
+            // Asegúrate de que los estilos iniciales de opacidad y transform estén definidos en tu CSS
+            // para que esta animación funcione correctamente desde un estado "oculto".
+            setTimeout(() => {
+                item.style.opacity = '1';
+                item.style.transform = 'translateX(0)';
+            }, 150 * index);
+        });
+    }
+
+    // Efecto de ondas en botones (Ripple effect)
+    document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+            const button = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
+            createRipple(e, button);
         }
+    });
 
-        // Activar animación de escritura cuando sea visible
+    function createRipple(event, button) {
+        const ripple = document.createElement('span');
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = event.clientX - rect.left - size / 2;
+        const y = event.clientY - rect.top - size / 2;
+        
+        ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s ease-out;
+            pointer-events: none;
+            z-index: 1;
+        `;
+        
+        if (!document.getElementById('ripple-styles')) {
+            const style = document.createElement('style');
+            style.id = 'ripple-styles';
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(2);
+                        opacity: 0;
+                    }
+                }
+                button, .servicios_texto a {
+                    position: relative;
+                    overflow: hidden;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        button.appendChild(ripple);
+        
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    }
+
+    // Smooth scroll para navegación
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                const headerHeight = document.querySelector('.header').offsetHeight;
+                const targetPosition = target.offsetTop - headerHeight - 20;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Animación de escritura para títulos
+    function typeWriter(element, text, speed = 100) {
+        let i = 0;
+        element.innerHTML = ''; // Limpia el contenido antes de empezar a escribir
+        
+        function type() {
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(type, speed);
+            }
+        }
+        type();
+    }
+
+    // Activar animación de escritura cuando sea visible
+    function initTypewriterEffect() {
         const serviciosTitle = document.querySelector('.servicios_texto h2');
         if (serviciosTitle) {
             const originalText = serviciosTitle.textContent;
@@ -458,21 +483,26 @@
             
             titleObserver.observe(serviciosTitle);
         }
+    }
 
-        // Cerrar menú móvil al redimensionar
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                headerBotones.classList.remove('active');
+    // Cerrar menú móvil al redimensionar
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            if (headerBotones) headerBotones.classList.remove('active');
+            if (hamburgerIcon) {
                 hamburgerIcon.classList.remove('active');
                 hamburgerIcon.setAttribute('aria-expanded', 'false');
-                
                 const icon = hamburgerIcon.querySelector('i');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
+                if (icon) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
             }
-        });
+        }
+    });
 
-        // Animación de latido para corazones
+    // Animación de latido para corazones
+    function initHeartbeatAnimation() {
         document.querySelectorAll('.footer-img img, .block_1 img, .block_2 img, .block_3 img').forEach(img => {
             img.addEventListener('mouseenter', function() {
                 this.style.animation = 'heartbeat 1.5s ease-in-out infinite';
@@ -482,37 +512,20 @@
                 this.style.animation = '';
             });
         });
+    }
 
-        // Prevenir envío del formulario y mostrar animación
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const button = this.querySelector('button');
-            const originalText = button.textContent;
-            
-            button.textContent = 'Enviando...';
-            button.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
-            
-            setTimeout(() => {
-                button.textContent = '¡Enviado!';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.background = '';
-                    this.reset();
-                }, 2000);
-            }, 1500);
-        });
+    // Modal del Aviso de Privacidad
+    const openModalBtn = document.getElementById('openModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const closeModalBtn = document.getElementById('closeModal');
+    // Las variables acceptBtn y declineBtn no se usan en el HTML proporcionado, así que las dejo comentadas.
+    // const acceptBtn = document.getElementById('acceptBtn'); 
+    // const declineBtn = document.getElementById('declineBtn');
+    const modal = document.querySelector('.modal');
 
-         // Referencias a elementos del DOM
-        const openModalBtn = document.getElementById('openModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const closeModalBtn = document.getElementById('closeModal');
-        const acceptBtn = document.getElementById('acceptBtn');
-        const declineBtn = document.getElementById('declineBtn');
-        const modal = document.querySelector('.modal');
-
-        // Función para abrir el modal
-        function openModal() {
+    // Función para abrir el modal
+    function openModal() {
+        if (modalOverlay && modal) {
             modalOverlay.classList.add('active');
             document.body.style.overflow = 'hidden'; // Prevenir scroll del body
             
@@ -521,32 +534,38 @@
                 modal.classList.add('fade-in');
             }, 100);
         }
+    }
 
-        // Función para cerrar el modal
-        function closeModal() {
+    // Función para cerrar el modal
+    function closeModal() {
+        if (modalOverlay && modal) {
             modal.classList.remove('fade-in');
             modalOverlay.classList.remove('active');
             document.body.style.overflow = 'auto'; // Restaurar scroll del body
         }
+    }
 
-        // Event listeners
-        openModalBtn.addEventListener('click', openModal);
-        closeModalBtn.addEventListener('click', closeModal);
-        acceptBtn.addEventListener('click', handleAccept);
-        declineBtn.addEventListener('click', handleDecline);
+    // Event listeners para el modal
+    if (openModalBtn) openModalBtn.addEventListener('click', openModal);
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+    // if (acceptBtn) acceptBtn.addEventListener('click', handleAccept); // Si los necesitas, descomenta y define handleAccept/handleDecline
+    // if (declineBtn) declineBtn.addEventListener('click', handleDecline);
 
-        // Cerrar modal al hacer clic fuera de él
+    // Cerrar modal al hacer clic fuera de él
+    if (modalOverlay) {
         modalOverlay.addEventListener('click', function(e) {
             if (e.target === modalOverlay) {
                 closeModal();
             }
         });
+    }
 
-        // Cerrar modal con la tecla Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                closeModal();
-            }
-        });
+    // Cerrar modal con la tecla Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modalOverlay && modalOverlay.classList.contains('active')) {
+            closeModal();
+        }
+    });
+});
 </script>
 </html>
