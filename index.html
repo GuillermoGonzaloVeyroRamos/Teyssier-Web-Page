@@ -326,28 +326,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Efecto parallax mejorado
-    function initParallax() {
-        let ticking = false;
-        
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const scrolled = window.pageYOffset;
-                    const banners = document.querySelectorAll('.banner_principal img, .second_banner img');
-                    
-                    banners.forEach((banner, index) => {
-                        const speed = 0.3 + (index * 0.1);
-                        banner.style.transform = `translateY(${scrolled * speed}px) scale(1.1)`;
-                    });
-                    
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
-    }
-
     // Animaciones de entrada escalonadas
     function initFadeInAnimations() {
         const fadeElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
