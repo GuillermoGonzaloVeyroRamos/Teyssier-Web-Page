@@ -428,6 +428,7 @@ body{
 }
 
 .servicio_img {
+    display: flex;
     width: 50%;
     position: relative;
     overflow: hidden;
@@ -438,7 +439,6 @@ body{
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
-    filter: brightness(1.1) contrast(1.1);
 }
 
 .servicio_img:hover img {
